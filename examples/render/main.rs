@@ -1,4 +1,4 @@
-use mermaid_rs::Mermaid;
+use mermaid::Mermaid;
 
 fn main() {
     let mermaid = Mermaid::new().unwrap();
