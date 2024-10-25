@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 escape_string = "0.1.2"
 headless_chrome = { version = "1.0.15", features = ["fetch"] }
+unescape = "0.1.0"

@@ -1,6 +1,8 @@
-use std::{error::Error, str::EscapeUnicode, sync::Arc};
+use std::{error::Error, sync::Arc};
 
+use escape_string::escape;
 use headless_chrome::{Browser, Tab};
+use unescape::unescape;
 
 #[derive(Clone)]
 pub struct Mermaid {
@@ -27,15 +29,11 @@ impl Mermaid {
     pub fn render(&self, input: &str) -> Result<String, Box<dyn Error>> {
         let data = self
             .tab
-            .evaluate(&format!("render('{}')", escape_string::escape(input)), true)?;
+            .evaluate(&format!("render('{}')", escape(input)), true)?;
         let string = data.value.unwrap_or_default().to_string();
-        let slice = string.trim_matches('"');
+        let slice = unescape(string.trim_matches('"')).unwrap_or_default();
         Ok(slice.to_string())
     }
-}
-
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
 }
 
 #[cfg(test)]
@@ -43,8 +41,17 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn create_mermaid_instance_without_crashing() {
+        let mermaid = Mermaid::new();
+        assert!(mermaid.is_ok());
+    }
+
+    #[test]
+    fn render_mermaid() {
+        let mermaid = Mermaid::new().unwrap();
+        let rendered = mermaid.render("graph TB\na-->b");
+        assert!(rendered.is_ok());
+        // TODO: Perform visual image comparison
+        assert!(rendered.unwrap().starts_with("<svg"));
     }
 }
