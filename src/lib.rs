@@ -1,8 +1,11 @@
 use std::{error::Error, sync::Arc};
 
+use error::CompileError;
 use escape_string::escape;
 use headless_chrome::{Browser, Tab};
 use unescape::unescape;
+
+mod error;
 
 #[derive(Clone)]
 pub struct Mermaid {
@@ -32,6 +35,11 @@ impl Mermaid {
             .evaluate(&format!("render('{}')", escape(input)), true)?;
         let string = data.value.unwrap_or_default().to_string();
         let slice = unescape(string.trim_matches('"')).unwrap_or_default();
+
+        if slice == "null" {
+            return Err(Box::new(CompileError));
+        }
+
         Ok(slice.to_string())
     }
 }
@@ -53,5 +61,12 @@ mod tests {
         assert!(rendered.is_ok());
         // TODO: Perform visual image comparison
         assert!(rendered.unwrap().starts_with("<svg"));
+    }
+
+    #[test]
+    fn syntax_error() {
+        let mermaid = Mermaid::new().unwrap();
+        let rendered = mermaid.render("grph TB\na-->b");
+        assert!(rendered.is_err());
     }
 }
