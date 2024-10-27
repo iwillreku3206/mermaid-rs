@@ -8,7 +8,7 @@ This library exposes the `render` function that converts Mermaid definitions to 
 
 To install, run the following command
 ```sh
-cargo install mermaid-rs
+cargo add mermaid-rs
 ```
 
 ## Usage
