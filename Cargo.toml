@@ -2,6 +2,12 @@
 name = "mermaid-rs"
 version = "0.1.0"
 edition = "2021"
+description = "Rust bindings for Mermaid JS"
+readme = "README.md"
+repository = "https://github.com/iwillreku3206/mermaid-rs"
+license = "MIT"
+keywords = ["mermaid", "javascript", "diagram", "flowchart", "illustration"]
+categories = ["api-bindings", "multimedia::images", "visualization"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

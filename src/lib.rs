@@ -7,6 +7,8 @@ use unescape::unescape;
 
 mod error;
 
+/// The Mermaid struct holds the embedded Chromium instance that is used to render Mermaid
+/// diagrams
 #[derive(Clone)]
 pub struct Mermaid {
     _browser: Browser,
@@ -14,6 +16,7 @@ pub struct Mermaid {
 }
 
 impl Mermaid {
+    /// Initializes Mermaid
     pub fn new() -> Result<Self, Box<dyn Error>> {
         let browser = Browser::default()?;
         let mermaid_js = include_str!("../payload/mermaid.min.js");
@@ -29,6 +32,13 @@ impl Mermaid {
         })
     }
 
+    /// Renders a diagram
+    ///
+    /// # Example:
+    /// ```
+    /// let mermaid = Mermaid::new();
+    /// let svg = mermaid.render("graph TB\na-->b").expect("Unable to render!");
+    /// ```
     pub fn render(&self, input: &str) -> Result<String, Box<dyn Error>> {
         let data = self
             .tab

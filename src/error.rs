@@ -1,5 +1,6 @@
 use std::{error::Error, fmt::Display};
 
+/// Error thrown if Mermaid is unable to compile the diagram
 #[derive(Debug)]
 pub struct CompileError;
 
